@@ -2105,7 +2105,7 @@ body.light-mode #music-link.active {
 
     .main-content {
         margin-left: 0;
-        padding-top: 0;
+        padding-top: 30px;
         padding-bottom: 70px;
         width: 100%;
     }
