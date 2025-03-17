@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="search-container">
                         <input type="text" id="chat-search" placeholder="Search your threads..." class="search-input" onkeyup="searchChats()">
                     </div>
+                    <div class="history-settings-btn">
+                        <i class="fas fa-cog"></i>
+                    </div>
                 </div>
                 <div class="threads-section">
                     <div class="threads-header">
@@ -72,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 display: flex;
                 flex-direction: column;
                 gap: 16px;
+                position: relative;
             }
             .library-title {
                 display: flex;
@@ -184,8 +188,46 @@ document.addEventListener('DOMContentLoaded', function() {
                 background: rgba(255, 255, 255, 0.1);
                 color: rgba(255, 255, 255, 0.8);
             }
+            .history-settings-btn {
+                position: absolute;
+                top: 0;
+                right: 0;
+                background: transparent;
+                border: none;
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 20px;
+                cursor: pointer;
+                padding: 8px;
+                border-radius: 50%;
+                transition: all 0.2s ease;
+                display: none; /* Hide on desktop */
+                align-items: center;
+                justify-content: center;
+            }
+            .history-settings-btn:hover {
+                background: rgba(255, 255, 255, 0.1);
+                color: rgba(255, 255, 255, 1);
+            }
+            
+            /* Show settings button only on mobile */
+            @media screen and (max-width: 768px) {
+                .history-settings-btn {
+                    display: flex;
+                }
+            }
         `;
         document.head.appendChild(style);
+
+        // Add event listener for the settings button
+        const historySettingsBtn = document.querySelector('.history-settings-btn');
+        if (historySettingsBtn) {
+            historySettingsBtn.addEventListener('click', function() {
+                // Use the global openSettingsPanel function
+                if (typeof window.openSettingsPanel === 'function') {
+                    window.openSettingsPanel();
+                }
+            });
+        }
     }
 
     // Function to restore chat interface

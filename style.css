@@ -2121,6 +2121,25 @@ body.light-mode #music-link.active {
         bottom: 56px;
         width: 100%;
     }
+    
+    .history-settings-btn {
+        position: absolute;
+        top: 0;
+        right: 10px;
+        font-size: 18px;
+        padding: 6px;
+        display: flex !important; /* Force display on mobile */
+    }
+    
+    .settings-panel {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+        height: calc(100vh - 56px); /* Adjust height to leave space for bottom navbar */
+        bottom: 56px; /* Position above the bottom navbar */
+        top: auto; /* Override the top positioning */
+        right: -100%; /* Start off-screen */
+    }
 
     /* Fix for iOS bottom safe area */
     @supports (padding: max(0px)) {
@@ -2134,6 +2153,11 @@ body.light-mode #music-link.active {
         }
 
         .input-wrapper {
+            bottom: calc(56px + env(safe-area-inset-bottom));
+        }
+        
+        .settings-panel {
+            height: calc(100vh - 56px - env(safe-area-inset-bottom));
             bottom: calc(56px + env(safe-area-inset-bottom));
         }
     }
@@ -2151,5 +2175,17 @@ body.light-mode .nav-item {
 
 body.light-mode .nav-item.active {
     color: #0f0f0f;
+}
+
+/* Mobile specific styles for the settings panel */
+@media screen and (max-width: 768px) {
+    .settings-panel {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS devices */
+    }
+    
+    .settings-panel-content {
+        padding-bottom: 70px; /* Add padding to ensure content isn't hidden behind the navbar */
+    }
 }
 

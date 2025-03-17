@@ -73,6 +73,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeSettingsPanel = () => {
         settingsPanel.classList.remove('show');
         mainContent.classList.remove('blur');
+        
+        // Reset sidebar z-index when closing settings
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+            sidebar.style.zIndex = "1000";
+        }
     };
 
     // Handle settings link click
@@ -91,7 +97,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
         if (settingsPanel.classList.contains('show') && 
             !settingsPanel.contains(e.target) && 
-            !settingsLink.contains(e.target)) {
+            !settingsLink.contains(e.target) &&
+            !e.target.closest('.history-settings-btn')) {
             closeSettingsPanel();
         }
     });
@@ -137,4 +144,18 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem(settingId, this.checked);
         });
     });
+    
+    // Make openSettingsPanel function globally accessible
+    window.openSettingsPanel = function() {
+        settingsPanel.classList.add('show');
+        
+        // Only blur the main content, not the sidebar (bottom navbar on mobile)
+        mainContent.classList.add('blur');
+        
+        // Make sure the sidebar stays visible on mobile
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+            sidebar.style.zIndex = "1001"; // Set higher z-index than settings panel
+        }
+    };
 }); 

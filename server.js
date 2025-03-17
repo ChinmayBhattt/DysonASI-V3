@@ -17,6 +17,7 @@ const GENAI_API_KEY = process.env.GEMINI_API_KEY;
 
 // Predefined responses
 const predefinedResponses = {
+    "who is your devloper": "I am DysonASI, your personalized Artificial Super Intelligence. How can I help you today?",
     "who are you": "I am DysonASI, your personalized Artificial Super Intelligence. How can I help you today?",
     "what's your name": "My name is DysonASI, and I'm here to assist you with anything you need!",
     "who created you": "I was created by the team of DysonASI to assist you with various tasks in your daily life.",
