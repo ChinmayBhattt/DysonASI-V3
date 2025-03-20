@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.stopPropagation();
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             this.classList.add('active');
-            restoreChatInterface();
+            window.location.reload(); // Refresh the page
         });
     }
 

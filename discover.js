@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Chat clicked');
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             this.classList.add('active');
-            restoreChatInterface();
+            window.location.reload(); // Refresh the page
         });
     }
 
