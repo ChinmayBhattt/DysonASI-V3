@@ -8,7 +8,7 @@ import stringSimilarity from "string-similarity";
 dotenv.config();
 
 const app = express();
-const PORT = 5000;
+const PORT = 5001;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -23,9 +23,9 @@ const predefinedResponses = {
     "who created you": "I was created by the team of DysonASI to assist you with various tasks in your daily life.",
     "are you human": "Nope! I am a highly advanced AI, but I can chat like a human if you want.",
     "can you think like a human": "I can process information and generate responses like a human, but I don't have emotions or personal experiences.",
-    "tell me a joke": "Sure! Why don’t rockets ever get good grades? Because they always go over everyone’s head! 🚀😆",
+    "tell me a joke": "Sure! Why don't rockets ever get good grades? Because they always go over everyone's head! 🚀😆",
     "what is dysonasi": "DysonASI stands for Dyson Artificial Super Intelligence, designed to assist, guide, and simplify your tasks.",
-    "are you smarter than google assistant": "I’m built differently! Google Assistant is great at real-world tasks, but I focus on intelligent conversation, research, and problem-solving.",
+    "are you smarter than google assistant": "I'm built differently! Google Assistant is great at real-world tasks, but I focus on intelligent conversation, research, and problem-solving.",
     "who made you": "Chinmay Bhatt, Prashant Jain",  // ✅ Added this
 
     // Added questions about Chinmay Bhatt

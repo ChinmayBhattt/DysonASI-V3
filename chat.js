@@ -3,16 +3,72 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function initializeChat() {
-    const inputField = document.querySelector(".input-field");
-    const sendButton = document.querySelector(".send-btn");
     const messagesContainer = document.querySelector(".messages-container");
-    const modeSelector = document.querySelector(".mode-selector");
     
     window.chatHistory = window.chatHistory || [];
     window.currentChatIndex = window.currentChatIndex || -1;
     window.isProcessing = false;
-    window.firstMessage = null; // Track first message for chat title
-    window.isChatSaved = false; // Track if current chat is already saved
+    window.firstMessage = null;
+    window.isChatSaved = false;
+
+    // Get the input elements
+    const inputField = document.querySelector(".v0-input-field");
+    const sendButton = document.querySelector(".v0-send-btn");
+    const actionButtons = document.querySelectorAll(".v0-action-btn");
+
+    function adjustTextareaHeight(reset = false) {
+        if (reset) {
+            inputField.style.height = '36px';
+            return;
+        }
+        
+        inputField.style.height = '36px';
+        const newHeight = Math.min(Math.max(inputField.scrollHeight, 36), 200);
+        inputField.style.height = newHeight + 'px';
+    }
+    
+    // Handle textarea input
+    inputField.addEventListener('input', () => {
+        adjustTextareaHeight();
+        // Toggle send button active state
+        sendButton.classList.toggle('active', inputField.value.trim().length > 0);
+    });
+    
+    // Handle Enter key
+    inputField.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            if (inputField.value.trim()) {
+                window.sendMessage();
+            }
+        }
+    });
+    
+    // Handle send button click
+    sendButton.addEventListener('click', () => {
+        if (inputField.value.trim()) {
+            window.sendMessage();
+        }
+    });
+    
+    // Handle action buttons
+    actionButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const action = button.textContent.trim();
+            inputField.value = `Help me ${action.toLowerCase()}`;
+            inputField.focus();
+            adjustTextareaHeight();
+            sendButton.classList.add('active');
+        });
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        adjustTextareaHeight();
+    });
+    
+    // Initial height adjustment
+    adjustTextareaHeight();
 
     // Save existing chat before refresh
     window.addEventListener('beforeunload', function() {
@@ -33,14 +89,6 @@ function initializeChat() {
             }
         }
     });
-
-    // Auto-resize textarea
-    if (inputField) {
-        inputField.addEventListener("input", function() {
-            this.style.height = "auto";
-            this.style.height = (this.scrollHeight) + "px";
-        });
-    }
 
     // Handle keyboard shortcuts
     document.addEventListener("keydown", function(e) {
@@ -66,8 +114,7 @@ function initializeChat() {
 
     // Expose functions globally
     window.sendMessage = async function() {
-        const inputField = document.querySelector(".input-field");
-        const messagesContainer = document.querySelector(".messages-container");
+        const inputField = document.querySelector(".v0-input-field");
         if (!inputField || !messagesContainer) return;
 
         const message = inputField.value.trim();
@@ -75,7 +122,6 @@ function initializeChat() {
 
         window.isProcessing = true;
         
-        // Store first message as chat title
         if (!window.firstMessage) {
             window.firstMessage = message;
         }
@@ -104,7 +150,7 @@ function initializeChat() {
         }
         
         try {
-            const response = await fetch("http://localhost:5000/chat", {
+            const response = await fetch("http://localhost:5001/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ message }),
@@ -113,9 +159,6 @@ function initializeChat() {
             const data = await response.json();
             const formattedResponse = formatResponse(data.response || "Sorry, I couldn't understand that.");
 
-            window.chatHistory[window.currentChatIndex].push({ text: formattedResponse, isUser: false });
-
-            // Remove thinking message and add AI response
             if (thinkingMessage && thinkingMessage.parentNode) {
                 thinkingMessage.remove();
             }
@@ -127,7 +170,6 @@ function initializeChat() {
             
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-            // Save chat to library only if it's the first message and not already saved
             if (!window.isChatSaved && window.firstMessage) {
                 const chatContent = Array.from(messagesContainer.children)
                     .map(msg => {
@@ -138,7 +180,7 @@ function initializeChat() {
                 
                 if (typeof window.saveChat === 'function') {
                     window.saveChat(chatContent, window.firstMessage);
-                    window.isChatSaved = true; // Mark chat as saved
+                    window.isChatSaved = true;
                 }
             }
 
@@ -228,18 +270,6 @@ function initializeChat() {
         return formattedLines.join('\n');
     }
 
-    // Initialize chat if elements exist
-    if (inputField && sendButton) {
-        sendButton.addEventListener("click", window.sendMessage);
-        inputField.addEventListener("keydown", function(event) {
-            if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault();
-                window.sendMessage();
-            }
-        });
-    }
-
-  
     // Start new thread if no chat exists
     if (window.currentChatIndex === -1) {
         window.startNewThread();
